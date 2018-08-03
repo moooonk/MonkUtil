@@ -4,7 +4,9 @@
 package com.monk.util.network.udp.netty;
 
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 
 import com.monk.util.configreader.CoreConfig;
 
@@ -46,7 +48,14 @@ public class ServerNetworkNetty {
 		b.group(group);
 		b.channel(NioDatagramChannel.class);
 		b.handler(new ServerNettyHandler());
-		channel = b.bind(CoreConfig.instance.getConfig().port()).sync().channel();
+		Properties properties = new Properties();
+		try {
+			properties.load(getClass().getResourceAsStream("/conf.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int port = Integer.valueOf(properties.getProperty("port"));
+		channel = b.bind(port).sync().channel();
 		return b;
 	}
 	
@@ -59,4 +68,9 @@ public class ServerNetworkNetty {
 		buf.writeBytes(data);
 		channel.writeAndFlush(new DatagramPacket(buf, ip));
 	}
+	
+	public static void main(String[] args) {
+		ServerNetworkNetty.instance.init();
+	}
+	
 }

@@ -26,6 +26,7 @@ public class ServerNettyHandler extends SimpleChannelInboundHandler<DatagramPack
 		byte[] req = new byte[buf.readableBytes()];
 		buf.readBytes(req);
 		buf.release();
+		System.out.println(new String(req, "UTF-8"));
 		if(checkRequest(req)){
 			ServerScheduled.instance.getExecutor().schedule(new JobForResponse(msg.sender()), 0, TimeUnit.SECONDS);
 		}
