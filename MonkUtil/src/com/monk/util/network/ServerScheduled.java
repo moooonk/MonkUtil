@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.monk.util.network.udp.netty;
+package com.monk.util.network;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -23,4 +23,8 @@ public class ServerScheduled {
 		return executor;
 	}
 	
+	public void shutdownNow() {
+		executor.shutdownNow();
+	}
+
 }
